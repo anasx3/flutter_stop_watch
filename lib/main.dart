@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last
-
-import 'dart:async';
+// ignore_for_file: unused_local_variable
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,198 +10,86 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: CounterDownApp(),
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // Try running your application with "flutter run". You'll see the
+        // application has a blue toolbar. Then, without quitting the app, try
+        // changing the primarySwatch below to Colors.green and then invoke
+        // "hot reload" (press "r" in the console where you ran "flutter run",
+        // or simply save your changes to "hot reload" in a Flutter IDE).
+        // Notice that the counter didn't reset back to zero; the application
+        // is not restarted.
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class CounterDownApp extends StatefulWidget {
-  const CounterDownApp({Key? key}) : super(key: key);
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+
+  final String title;
 
   @override
-  State<CounterDownApp> createState() => _CounterDownAppState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _CounterDownAppState extends State<CounterDownApp> {
-  Timer? repeatedFunction;
-  Duration duration = Duration(seconds: 0);
-
-  startTimer() {
-    repeatedFunction = Timer.periodic(Duration(seconds: 1), (qqqqqq) {
-      setState(() {
-        int newSeconds = duration.inSeconds + 1;
-        duration = Duration(seconds: newSeconds);
-      });
-    });
-  }
-
-  bool isRunning = false;
+class _MyHomePageState extends State<MyHomePage> {
+  Map receivedData = {"timezone": "Egypt..."};
 
   @override
   Widget build(BuildContext context) {
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 33, 40, 43),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 22),
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16)),
-                    child: Text(
-                      duration.inHours.toString().padLeft(2, "0"),
-                      style: TextStyle(
-                        fontSize: 77,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    "Hours",
-                    style: TextStyle(fontSize: 22, color: Colors.white),
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: 22,
-              ),
-              Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 22),
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16)),
-                    child: Text(
-                      duration.inMinutes
-                          .remainder(60)
-                          .toString()
-                          .padLeft(2, "0"),
-                      style: TextStyle(
-                        fontSize: 77,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    "minutes",
-                    style: TextStyle(fontSize: 22, color: Colors.white),
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: 22,
-              ),
-              Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 22),
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16)),
-                    child: Text(
-                      duration.inSeconds
-                          .remainder(60)
-                          .toString()
-                          .padLeft(2, "0"),
-                      style: TextStyle(
-                        fontSize: 77,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    "Seconds",
-                    style: TextStyle(fontSize: 22, color: Colors.white),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 55,
-          ),
-          isRunning
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        if (repeatedFunction!.isActive) {
-                          setState(() {
-                            repeatedFunction!.cancel();
-                          });
-                        } else {
-                          startTimer();
-                        }
-                      },
-                      child: Text(
-                        (repeatedFunction!.isActive) ? "Stop" : "Resume",
-                        style: TextStyle(fontSize: 22),
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Color.fromARGB(255, 197, 25, 97)),
-                        padding: MaterialStateProperty.all(EdgeInsets.all(14)),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(9))),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 22,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        repeatedFunction!.cancel();
-                        setState(() {
-                          duration = Duration(seconds: 0);
-                          isRunning = false;
-                        });
-                      },
-                      child: Text(
-                        "CANCEL",
-                        style: TextStyle(fontSize: 19),
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Color.fromARGB(255, 197, 25, 97)),
-                        padding: MaterialStateProperty.all(EdgeInsets.all(14)),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(9))),
-                      ),
-                    ),
-                  ],
-                )
-              : ElevatedButton(
-                  onPressed: () {
-                    startTimer();
-                    setState(() {
-                      isRunning = true;
-                    });
-                  },
-                  child: Text(
-                    "Start Timer",
-                    style: TextStyle(fontSize: 23),
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                        Color.fromARGB(255, 25, 120, 197)),
-                    padding: MaterialStateProperty.all(EdgeInsets.all(14)),
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(9))),
-                  ),
-                )
-        ],
+      appBar: AppBar(
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
       ),
+      body: Center(
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              receivedData["timezone"],
+              style: TextStyle(fontSize: 55),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          Response response = await get(
+              Uri.parse('http://worldtimeapi.org/api/timezone/Asia/Riyadh'));
+
+          print(receivedData);
+        },
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
